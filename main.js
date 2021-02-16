@@ -130,3 +130,31 @@ function thirdLargest(tree){
 
 console.log('third', thirdLargest(BST))
 
+//8. No leaves differ in distance from the root by more than 1
+/* 
+find all branch distances
+once first branch found, if any branch coems back as too short, output end
+
+*/let branches = []
+function isBalanced(tree, count) {
+    if (!tree) return false
+    if (tree.left !== null){
+        let Lcount = count+1
+        isBalanced(tree.left, Lcount)
+    }
+    else {
+        branches.push(count)
+        if (longestBranch-count > 1 || count-longestBranch > 1) return false
+    }
+    if (tree.right !== null){
+        let Rcount = count+1
+        isBalanced(tree.right, Rcount)
+    }
+    else {
+        branches.push(count)
+        //FIX HERE!!!!!
+        if (longestBranch-count > 1 || count-longestBranch > 1) return false
+    }
+
+    return longestBranch
+}
