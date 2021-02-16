@@ -23,6 +23,9 @@ class BinarySearchTree {
             if (this.right == null) {
                 this.right = new BinarySearchTree(key, value, this)
             }
+            else {
+                this.right.insert(key, value)
+            }
         }
     }
     find(key){
@@ -40,4 +43,64 @@ class BinarySearchTree {
             throw new Error('Key not found')
         }
     }
+    remove(key, value){
+        if (this.key == key) {
+            if (this.left && this.right) {
+                const successor = this.right._findMin()
+                this.key = successor.key
+                this.value = successor.value
+                successor.remove(successor.key)
+            }
+            else if (this.left) {
+                this._replaceWith(this.left)
+            }
+            else if (this.right) {
+                this._replaceWith(this.right)
+            }
+            else {
+                this._replaceWith(null)
+            }
+        }
+        else if (key < this.key && this.left) {
+            this.left.remove(key)
+        }
+        else if (key > this.key && this.right) {
+            this.right.remove(key)
+        }
+        else {
+            throw new Error('Key Error')
+        }
+    }
+    _replaceWith(node) {
+        //replace a parent with a child
+        if (this.parent) {
+            if (this == this.parent.left) {
+                this.parent.left = node
+            }
+        }
+        //if root
+        else {
+            if (node) {
+                this.key = node.key
+                this.value = node.value
+                this.left = node.left
+                this.right = node.right
+            }
+            //nullify
+            else {
+                this.key = null
+                this.value = null
+                this.left = null
+                this.right = null
+            }
+        }
+    }
+    _findMin(){
+        if (!this.left){
+            return this
+        }
+        return this.left._findMin()
+    }
 }
+
+module.exports = BinarySearchTree
